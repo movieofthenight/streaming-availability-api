@@ -44,7 +44,7 @@ movies, series, seasons and episodes.
 
 ### Terms & Conditions and Attribution
 
-While the client libraries have <license> licenses,
+While the client libraries have MIT licenses,
 the Streaming Availability API itself has further
 [Terms & Conditions](https://github.com/movieofthenight/streaming-availability-api/blob/main/TERMS.md).
 Make sure to read it before using the API.
