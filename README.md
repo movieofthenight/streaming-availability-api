@@ -22,7 +22,7 @@ To send more requests, you can upgrade to paid plans whenever you like.
 
 - [Main GitHub Repository of the API](https://github.com/movieofthenight/streaming-availability-api)
 
-### Main Features
+### Features
 
 - Query streaming availability info of the movies and series via their TMDb or IMDd ids.
 - Search for movies and series via their titles, genres, keywords, release years on
@@ -41,9 +41,10 @@ movies, series, seasons and episodes.
 - Channel and addon support (e.g. Apple TV Channels, Hulu Addons, Prime Video Channels)
 - Output also includes TMDB and IMDb ids for every show.
 
+
 ### Terms & Conditions and Attribution
 
-While the client libraries have MIT licenses,
+While the client libraries have <license> licenses,
 the Streaming Availability API itself has further
 [Terms & Conditions](https://github.com/movieofthenight/streaming-availability-api/blob/main/TERMS.md).
 Make sure to read it before using the API.
