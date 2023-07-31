@@ -49,7 +49,7 @@ the Streaming Availability API itself has further
 Make sure to read it before using the API.
 
 Notably, the API requires an attribution to itself, if the data acquired through
-is made public. You can read further about it on the
+is made public. You can read further about the attribution requirement on the
 [Terms & Conditions](https://github.com/movieofthenight/streaming-availability-api/blob/main/TERMS.md)
 page.
 
