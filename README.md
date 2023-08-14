@@ -42,7 +42,7 @@ movies, series, seasons and episodes.
 - Output also includes TMDB and IMDb ids for every show.
 
 
-### Terms & Conditions and Attribution
+## Terms & Conditions and Attribution
 
 While the client libraries have MIT licenses,
 the Streaming Availability API itself has further
