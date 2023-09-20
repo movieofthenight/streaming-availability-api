@@ -35,13 +35,13 @@ get the most popular series in the last 7 days
 on Amazon Prime and Disney+ in the United Kingdom)
 - Returned streaming availability info includes:
   - Deep links into the streaming services for
-movies, series, seasons and episodes.
-  - Available video qualities (eg. SD, HD, UHD).
-  - Available subtitles and audios.
-  - First detection time of the shows on the streaming services.
-  - Expiry date of the shows/seasons/episodes on the streaming services.
+movies, series, seasons and episodes,
+  - Available video qualities (eg. SD, HD, UHD),
+  - Available subtitles and audios,
+  - First detection time of the shows on the streaming services,
+  - Expiry date of the shows/seasons/episodes on the streaming services,
   - All the available options to stream a show
-(e.g. via subscription, to buy/rent, for free, available via an addons)
+(e.g. via subscription, to buy/rent, for free, available via an addons),
   - Price and currency information for buyable/rentable shows
 - Channel and addon support (e.g. Apple TV Channels, Hulu Addons, Prime Video Channels)
 - Output also includes TMDB and IMDb ids for every show.
