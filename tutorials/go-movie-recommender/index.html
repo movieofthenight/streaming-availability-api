@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description"
+        content="Reccio is a movie recommendation website that allows you to search for movies based on genre, keyword, and streaming service availability.">
+    <link rel="shortcut icon" href="static/favicon.ico">
+    <title>Reccio</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div id="service-selection-container" style="display:none;">
+        <div id="service-selection"></div>
+        <div id="save-button-container">
+            <div id="save-button">Save</div>
+        </div>
+    </div>
+    <div id="main-page">
+        <div id="top-bar">Reccio</div>
+        <div id="options">
+            <form id="options-form">
+                <div id="genre-option">
+                    <select id="genre-input">
+                        <option value="" selected>
+                            Any Genre
+                        </option>
+                    </select>
+                </div>
+                <div id="movie-type-option">
+                    <select id="movie-type-input">
+                    </select>
+                </div>
+                <div id="keyword-option">
+                    <input type="text" id="keyword-input" placeholder="Keyword">
+                </div>
+                <div id="service-country-option">
+                    <div id="country-option">
+                        <select id="country-input"></select>
+                    </div>
+                    <div id="services-option">
+                        <div id="edit-div">
+                            <div id="edit-button">Edit Services</div>
+                        </div>
+                        <div id="service-logos">
+                            <div id="chosen-logos" class="logo-set chosen"></div>
+                            <div id="not-chosen-logos" class="logo-set not-chosen"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="submit-option">
+                    <button id="submit-button">Let's Go!</button>
+                </div>
+            </form>
+        </div>
+        <div id="results"></div>
+        <div id="attributions">
+            <div>
+                This product uses
+                <a href="https://www.movieofthenight.com/about/api" target="_blank">Streaming Availability API</a>.
+            </div>
+            <div id="tmdb-attribution">
+                <div>This product uses the TMDB API but is not endorsed or certified by TMDB.</div>
+                <img id="tmdb-logo"
+                     alt="TMDB Logo"
+                     src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg">
+            </div>
+        </div>
+    </div>
+    <script src="static/script.js"></script>
+</body>
+</html>
