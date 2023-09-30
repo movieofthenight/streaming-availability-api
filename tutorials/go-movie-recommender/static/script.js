@@ -60,7 +60,7 @@ class Service {
 		let localServices = localStorage.getItem("services");
 		if(localServices == null) {
 			// Default services if none are set
-			return ["netflix", "disney", "max", "hulu", "prime", "hbo"];
+			return ["netflix", "disney", "hulu", "prime", "hbo"];
 		}
 		return JSON.parse(localServices);
 	}
