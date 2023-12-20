@@ -1,6 +1,6 @@
 ## Streaming Availability API
 
-Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 58 countries!
+Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 59 countries!
 
 ### API Key
 
@@ -118,8 +118,8 @@ RapidAPI and start using the Streaming Availability API through RapidAPI right a
 
 | Service Id | Service Name | Supported Countries |
 | ---------- | ------------ | ------------------- |
-| `netflix` | Netflix | 57 Countries |
-| `prime` | Amazon Prime Video | 56 Countries |
+| `netflix` | Netflix | 58 Countries |
+| `prime` | Prime Video | 56 Countries |
 | `disney` | Disney+ | 35 Countries |
 | `hbo` | HBO Max | 24 Countries |
 | `hulu` | Hulu | United States |
@@ -197,6 +197,7 @@ RapidAPI and start using the Streaming Availability API through RapidAPI right a
 | `ru` | Russia |
 | `se` | Sweden |
 | `sg` | Singapore |
+| `si` | Slovenia |
 | `th` | Thailand |
 | `tr` | Turkey |
 | `ua` | Ukraine |
