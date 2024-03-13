@@ -18,6 +18,8 @@ To send more requests, you can upgrade to paid plans whenever you like.
 
 - [Full Documentation of All Available Endpoints](https://www.movieofthenight.com/about/api/documentation)
 
+- [Contact Form](https://www.movieofthenight.com/contact)
+
 - [Home Page of the API on RapidAPI](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/)
 
 - [Main GitHub Repository of the API](https://github.com/movieofthenight/streaming-availability-api)
@@ -59,6 +61,11 @@ is made public. You can read further about the attribution requirement on the
 [Terms & Conditions](https://github.com/movieofthenight/streaming-availability-api/blob/main/TERMS.md)
 page.
 
+## Contact Us
+
+If you have any questions or need further assistance, please don't hesitate to reach us via
+[our contact form](https://www.movieofthenight.com/contact).
+
 ## FAQ
 
 - **I run into an issue. How can I get help?**
@@ -70,18 +77,15 @@ on the respective repository of the library.
 
 - **API returned me some wrong data. What can I do?**
   - Send us a message with details of your findings.
-You can click on the "Contact" button on this
-[page](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/details).
+You can reach ous via [our contact form](https://www.movieofthenight.com/contact).
 Once we receive the message we will take a look into the problems and fix the data.
 
 - **I have a request to get a new streaming service supported by the API.**
-  - Send us a message by clicking on the "Contact" button on this
-  [page](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/details),
+  - Send us a message via [our contact form](https://www.movieofthenight.com/contact),
   and we will get back to you.
 
 - **I need a client library in another language.**
-  - Send us a message by clicking on the "Contact" button on this
-  [page](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/details),
+  - Send us a message via [our contact form](https://www.movieofthenight.com/contact),
   and we will get back to you.
 
 - **I need further details (e.g. posters, summaries, cast) about the shows. What can I do?**
@@ -120,21 +124,20 @@ RapidAPI and start using the Streaming Availability API through RapidAPI right a
 | ---------- | ------------ | ------------------- |
 | `netflix` | Netflix | 58 Countries |
 | `prime` | Prime Video | 56 Countries |
-| `disney` | Disney+ | 35 Countries |
+| `disney` | Disney+ | 36 Countries |
 | `hbo` | HBO Max | 24 Countries |
 | `hulu` | Hulu | United States |
 | `peacock` | Peacock | United States |
 | `paramount` | Paramount+ | 18 Countries |
 | `starz` | Starz | United States |
-| `showtime` | Showtime | United States |
 | `apple` | Apple TV | 52 Countries |
-| `mubi` | Mubi | 55 Countries |
+| `mubi` | Mubi | 53 Countries |
 | `stan` | Stan | Australia |
 | `now` | Now | United Kingdom, Ireland, Italy |
 | `crave` | Crave | Canada |
 | `all4` | Channel 4 | United Kingdom, Ireland |
 | `iplayer` | BBC iPlayer | United Kingdom |
-| `britbox` | BritBox | United Kingdom, United States, Canada, Australia, South Africa |
+| `britbox` | BritBox | United States, Canada, Australia, South Africa |
 | `hotstar` | Hotstar | India, Canada, United Kingdom, Singapore |
 | `zee5` | Zee5 | 58 Countries |
 | `curiosity` | Curiosity Stream | 57 Countries |
