@@ -16,8 +16,6 @@ To send more requests, you can upgrade to paid plans whenever you like.
 
 - [Subscription Page on RapidAPI](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/pricing)
 
-- [Full Documentation of All Available Endpoints](https://www.movieofthenight.com/about/api/documentation)
-
 - [Contact Form](https://www.movieofthenight.com/contact)
 
 - [Home Page of the API on RapidAPI](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/)
@@ -46,7 +44,8 @@ movies, series, seasons and episodes,
 (e.g. via subscription, to buy/rent, for free, available via an addons),
   - Price and currency information for buyable/rentable shows
 - Channel and addon support (e.g. Apple TV Channels, Hulu Addons, Prime Video Channels)
-- Output also includes TMDB and IMDb ids for every show.
+- Posters, backdrops, cast & director information, genres, rating and many other details of the shows
+- Output also includes TMDB and IMDb ids for every show
 
 
 ## Terms & Conditions and Attribution
@@ -87,25 +86,6 @@ Once we receive the message we will take a look into the problems and fix the da
 - **I need a client library in another language.**
   - Send us a message via [our contact form](https://www.movieofthenight.com/contact),
   and we will get back to you.
-
-- **I need further details (e.g. posters, summaries, cast) about the shows. What can I do?**
-  - Streaming Availability API works very well with
-  [TMDB API](https://developer.themoviedb.org/docs), which can provide all the other
-  info (that is not related to streaming availability) you need.
-  You can pass the returned `tmdbId` field to the TMDB API's
-  [movie-details](https://developer.themoviedb.org/reference/movie-details)
-  or
-  [tv-series-details](https://developer.themoviedb.org/reference/tv-series-details)
-  endpoints
-  and get the other details of the shows.
-
-- **What is the difference between Streaming Availability API and TMDB API?**
-  - The Movie Database (TMDB) is a community built movie and TV database, similar to IMDb.
-  Their free API provides access to their database which includes posters, summaries, cast,
-  and many other details about the shows. TMDB API's own streaming availability information
-  data does not include deep links or any of the other features of this API such as
-  available subtitles, audios, video qualities etc. Thus Streaming Availability API
-  and TMDB API work hand in hand to get you all the details of the shows.
 
 - **What is RapidAPI?**
   - RapidAPI is the world's largest API marketplace. We use RapidAPI to handle the
