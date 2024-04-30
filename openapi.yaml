@@ -1,0 +1,1923 @@
+openapi: 3.1.0
+
+info:
+  title: Streaming Availability API
+  description: Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 59 countries!
+  version: 4.0.0
+
+servers:
+  - url: https://streaming-availability.p.rapidapi.com
+    description: Official API Server
+
+tags:
+  - name: shows
+    x-schema: show
+    externalDocs:
+      url: <external_doc_4>shows</external_doc_4>
+      description: Official Documentation
+  - name: countries
+    x-schema: country
+    externalDocs:
+      url: <external_doc_4>countries</external_doc_4>
+      description: Official Documentation
+  - name: genres
+    x-schema: genre
+    externalDocs:
+      url: <external_doc_4>genres</external_doc_4>
+      description: Official Documentation
+  - name: changes
+    x-schema: change
+    externalDocs:
+      url: <external_doc_4>changes</external_doc_4>
+      description: Official Documentation
+
+components:
+  securitySchemes:
+    X-Rapid-API-Key:
+      description: "Rapid API Key can be retrieved from [Rapid API](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/pricing)."
+      type: apiKey
+      name: X-RapidAPI-Key
+      in: header
+
+  schemas:
+    addon:
+      title: addon
+      type: object
+      additionalProperties: false
+      description: Details of an addon.
+      required:
+        - id
+        - name
+        - homePage
+        - themeColorCode
+        - imageSet
+      properties:
+        id:
+          type: string
+          description: Id of the addon.
+        name:
+          type: string
+          description: Name of the addon.
+        homePage:
+          type: string
+          description: Link to the homepage of the addon.
+        themeColorCode:
+          type: string
+          description: Associated theme color hex code of the addon.
+        imageSet:
+          $ref: "#/components/schemas/serviceImageSet"
+          description: Image set of the addon.
+
+    streamingOptionTypes:
+      title: streamingOptionTypes
+      type: object
+      additionalProperties: false
+      description: Availability of the streaming option types in the service.
+      required:
+        - addon
+        - buy
+        - rent
+        - free
+        - subscription
+      properties:
+        addon:
+          type: boolean
+          description: Whether there are shows available via an addon/channel subscription.
+        buy:
+          type: boolean
+          description: Whether there are shows available to buy.
+        rent:
+          type: boolean
+          description: Whether there are shows available for rental.
+        free:
+          type: boolean
+          description: Whether there are free shows to watch.
+        subscription:
+          type: boolean
+          description: Whether there are shows available via a paid subscription plan.
+
+    serviceImageSet:
+      title: serviceImageSet
+      type: object
+      additionalProperties: false
+      description: Image set of a service or an addon.
+      required:
+        - lightThemeImage
+        - darkThemeImage
+        - whiteImage
+      properties:
+        lightThemeImage:
+          type: string
+          description: Link to the logo suitable for light themed background.
+        darkThemeImage:
+          type: string
+          description: Link to the logo suitable for dark themed background.
+        whiteImage:
+          type: string
+          description: Link to the logo that is all white.
+
+    serviceInfo:
+      title: serviceInfo
+      type: object
+      additionalProperties: false
+      description: Details of the streaming service localized according to the parent country.
+      required:
+        - id
+        - name
+        - homePage
+        - themeColorCode
+        - imageSet
+      properties:
+        id:
+          type: string
+          description: Id of the service.
+        name:
+          type: string
+          description: Name of the service.
+        homePage:
+          type: string
+          description: Link to the homepage of the service.
+        themeColorCode:
+          type: string
+          description: Associated theme color hex code of the service.
+        imageSet:
+          $ref: "#/components/schemas/serviceImageSet"
+          description: Image set of the service.
+
+    service:
+      title: service
+      description: Details of a streaming service localized according to the parent country.
+      allOf:
+        - $ref: "#/components/schemas/serviceInfo"
+        - type: object
+          additionalProperties: false
+          required:
+            - streamingOptionTypes
+            - addons
+          properties:
+            streamingOptionTypes:
+              $ref: "#/components/schemas/streamingOptionTypes"
+            addons:
+              $ref: "#/components/schemas/addonMap"
+
+    addonMap:
+      type: object
+      description: Map of the supported addons by their ids.
+      additionalProperties:
+        $ref: "#/components/schemas/addon"
+
+    streamingOptionsMap:
+      type: object
+      description: Map of the streaming options by the country code.
+      additionalProperties:
+        type: array
+        description: Array of the streaming options found in a country.
+        items:
+          $ref: "#/components/schemas/streamingOption"
+
+    country:
+      title: country
+      type: object
+      examples:
+        - summary: United States
+          externalValue: https://www.movieofthenight.com/v4/examples/countries/us
+        - summary: Canada
+          externalValue: https://www.movieofthenight.com/v4/examples/countries/ca
+        - summary: United Kingdom
+          externalValue: https://www.movieofthenight.com/v4/examples/countries/gb
+        - summary: Germany
+          externalValue: https://www.movieofthenight.com/v4/examples/countries/de
+        - summary: India
+          externalValue: https://www.movieofthenight.com/v4/examples/countries/in
+      additionalProperties: false
+      description: |
+        Countries are the primary way to get the supported streaming services and addons
+        (such as list of available Apple TV and Prime Video channels) in a region.
+        
+        Each country object contains the country code, name and the list of supported streaming services.
+        
+        Details of the streaming services include localized
+        logos, homepages, theme colors, and available streaming options and addons.
+      required:
+        - countryCode
+        - name
+        - services
+      properties:
+        countryCode:
+          type: string
+          description: |
+            [ISO 3166-1 alpha-2 code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) of the country.
+        name:
+          type: string
+          description: Name of the country.
+        services:
+          type: array
+          description: Array of the supported services in the country, ordered by popularity.
+          items:
+            $ref: "#/components/schemas/service"
+
+    show:
+      title: show
+      description: |
+        A show object represents a movie or a series. Type of the show is determined by the showType property,
+        which is either movie or series. Based on this type, some properties are omitted,
+        for example a movie does not have seasonCount and episodeCount properties.
+        
+        Show object contains the details such as the title, overview, genres, cast, rating and images.
+        You can find the streaming availability information under streamingOptions property.
+        Each streaming option contains the service info, deep link, video quality, available audios and subtitles
+        and more. It also includes the price if the show is available to buy or rent;
+        and addon info if the show is available via an addon (such as Apple TV Channels, Prime Video Channels etc.).
+
+        You can also find the seasons of the series under the seasons property,
+        and the episodes of a season under the episodes property of the season object.
+        Via the streamingOptions property of seasons and episodes,
+        you can get the individual streaming options of them.
+        These streaming options include the same set of properties as the show streaming options,
+        so you can use them to get deep links to episodes and seasons, and to see available audios and subtitles.
+        
+        Note that seasons and episodes are not included in the search results
+        unless you set the series_granularity parameter to seasons or episodes.
+        For more info, check out the series_granularity parameter of the search endpoints.
+        
+        There are multiple ways to retrieve shows.
+        You can retrieve a show by its IMDb or TMDB id via [/shows/{id}](#get-a-show) endpoint;
+        you can search shows by their title via [/shows/search/title](#search-shows-by-title) endpoint;
+        and you can search shows by filters such as genres, release year, rating etc.
+        via [/shows/search/filters](#search-shows-by-filters) endpoint. This endpoint also supports pagination
+        and offers advanced ordering options such as ordering by popularity, rating, release year etc.
+
+      type: object
+      additionalProperties: false
+      examples:
+        - summary: The Godfather
+          externalValue: https://www.movieofthenight.com/v4/examples/shows/god-father
+        - summary: The Dark Knight
+          externalValue: https://www.movieofthenight.com/v4/examples/shows/the-dark-knight
+        - summary: The Queen's Gambit
+          externalValue: https://www.movieofthenight.com/v4/examples/shows/the-queens-gambit
+        - summary: Chernobyl
+          externalValue: https://www.movieofthenight.com/v4/examples/shows/chernobyl
+      properties:
+        itemType:
+          type: string
+          description: Type of the item. Always show.
+          const: show
+        showType:
+          $ref: "#/components/schemas/showType"
+          description: Type of the show. Based on the type, some properties might be omitted.
+        id:
+          description: Id of the show.
+          type: string
+        imdbId:
+          description: "[IMDb](https://www.imdb.com/) id of the show."
+          type: string
+        tmdbId:
+          description: "[TMDD](https://www.themoviedb.org/) id of the show."
+          type: string
+        title:
+          description: Title of the show.
+          type: string
+        overview:
+          description: A brief overview of the overall plot of the show.
+          type: string
+        releaseYear:
+          description: The year that the movie was released.
+          type: integer
+        firstAirYear:
+          description: The first year that the series aired.
+          type: integer
+        lastAirYear:
+          description: The last year that the series aired.
+          type: integer
+        originalTitle:
+          description: Original title of the show.
+          type: string
+        genres:
+          description: Array of the genres of the show.
+          type: array
+          items:
+            $ref: "#/components/schemas/genre"
+        directors:
+          description: Array of the directors of the movie.
+          type: array
+          items:
+            type: string
+        creators:
+          description: Array of the creators of the series.
+          type: array
+          items:
+            type: string
+        cast:
+          description: Array of the cast of the show.
+          type: array
+          items:
+            type: string
+        rating:
+          description: Rating of the show. This is calculated by taking the average of ratings found online from multiple sources.
+          type: integer
+          minimum: 0
+          maximum: 100
+        seasonCount:
+          type: integer
+          description: Number of seasons that are either aired or announced for a series.
+        episodeCount:
+          type: integer
+          description: Number of episodes that are either aired or announced for a series.
+        imageSet:
+          $ref: "#/components/schemas/showImageSet"
+          description: Image set of the show.
+        streamingOptions:
+          $ref: "#/components/schemas/streamingOptionsMap"
+        seasons:
+          description: Array of the seasons belong to the series.
+          type: array
+          items:
+            $ref: "#/components/schemas/season"
+      required:
+        - itemType
+        - showType
+        - title
+        - streamingOptions
+        - id
+        - imdbId
+        - tmdbId
+        - originalTitle
+        - genres
+        - cast
+        - overview
+        - rating
+        - imageSet
+
+    showImageSet:
+      title: showImageSet
+      type: object
+      additionalProperties: false
+      description: Image set of a show.
+      required:
+        - verticalPoster
+        - horizontalPoster
+      properties:
+        verticalPoster:
+          $ref: "#/components/schemas/verticalImage"
+          description: Vertical poster of the show.
+        horizontalPoster:
+          $ref: "#/components/schemas/horizontalImage"
+          description: Horizontal poster of the show.
+        verticalBackdrop:
+          $ref: "#/components/schemas/verticalImage"
+          description: Vertical backdrop of the show.
+        horizontalBackdrop:
+          $ref: "#/components/schemas/horizontalImage"
+          description: Horizontal backdrop of the show.
+
+    horizontalImage:
+      title: horizontalImage
+      type: object
+      additionalProperties: false
+      description: Horizontal image of a show.
+      required:
+        - w360
+        - w480
+        - w720
+        - w1080
+        - w1440
+      properties:
+        w360:
+          type: string
+          description: Link to the 360px wide version of the image.
+        w480:
+          type: string
+          description: Link to the 480px wide version of the image.
+        w720:
+          type: string
+          description: Link to the 720px wide version of the image.
+        w1080:
+          type: string
+          description: Link to the 1080px wide version of the image.
+        w1440:
+          type: string
+          description: Link to the 1440px wide version of the image.
+
+    verticalImage:
+      title: verticalImage
+      type: object
+      additionalProperties: false
+      description: Horizontal image of a show.
+      required:
+        - w240
+        - w360
+        - w480
+        - w600
+        - w720
+      properties:
+        w240:
+          type: string
+          description: Link to the 240px wide version of the image.
+        w360:
+          type: string
+          description: Link to the 360px wide version of the image.
+        w480:
+          type: string
+          description: Link to the 480px wide version of the image.
+        w600:
+          type: string
+          description: Link to the 600px wide version of the image.
+        w720:
+          type: string
+          description: Link to the 720px wide version of the image.
+
+    season:
+      title: season
+      type: object
+      description: Details of a season.
+      properties:
+        itemType:
+          type: string
+          description: Type of the item. Always season.
+          const: season
+        title:
+          description: Title of the season.
+          type: string
+        firstAirYear:
+          description: The first year that the season aired.
+          type: integer
+        lastAirYear:
+          description: The last year that the season aired.
+          type: integer
+        streamingOptions:
+          $ref: "#/components/schemas/streamingOptionsMap"
+        episodes:
+          type: array
+          description: Array of the episodes belong to the season.
+          items:
+            $ref: "#/components/schemas/episode"
+      required:
+        - itemType
+        - title
+        - firstAirYear
+        - lastAirYear
+        - streamingOptions
+
+    episode:
+      title: episode
+      type: object
+      description: Details of an episode.
+      properties:
+        itemType:
+          type: string
+          description: Type of the item. Always episode.
+          const: episode
+        title:
+          description: Title of the episode.
+          type: string
+        airYear:
+          description: The year that the episode aired.
+          type: integer
+        streamingOptions:
+          $ref: "#/components/schemas/streamingOptionsMap"
+      required:
+        - itemType
+        - title
+        - streamingOptions
+        - airYear
+
+    streamingOptionType:
+      description: Type of the streaming option.
+      type: string
+      
+      x-enumDescriptions:
+        free: Free to watch.
+        subscription: Available with a subscription.
+        buy: Available to buy.
+        rent: Available for rental.
+        addon: Available via an addon.
+      
+      enum:
+        - free
+        - subscription
+        - buy
+        - rent
+        - addon
+
+    streamingOption:
+      title: streamingOption
+      type: object
+      description: A streaming option.
+      additionalProperties: false
+      properties:
+        service:
+          $ref: "#/components/schemas/serviceInfo"
+        type:
+          $ref: "#/components/schemas/streamingOptionType"
+        addon:
+          $ref: "#/components/schemas/addon"
+          description: |
+            Addon that the streaming option is available through.
+            Omitted if the streaming option is not available through an addon.
+        link:
+          type: string
+          description: |
+            Deep link to the streaming option's page in the web app of the streaming service.
+            Unlike videoLink, this field is guaranteed to be populated.
+        videoLink:
+          type: string
+          description: |
+            Deep link to the video associated with the streaming option.
+            Omitted if there's no direct link to the video.
+            Might have the same value as link.
+        quality:
+          description: Maximum supported video quality of the streaming option.
+          type: string
+          
+          x-enumDescriptions:
+            sd: Standard Definition
+            hd: High Definition
+            qhd: Quad High Definition
+            uhd: Ultra High Definition
+          
+          enum:
+            - sd
+            - hd
+            - qhd
+            - uhd
+        audios:
+          type: array
+          description: Array of the available audios.
+          items:
+            $ref: "#/components/schemas/locale"
+        subtitles:
+          type: array
+          description: Array of the available subtitles.
+          items:
+            $ref: "#/components/schemas/subtitle"
+        price:
+          $ref: "#/components/schemas/price"
+        expiresSoon:
+          description: Whether the streaming option expires within a month.
+          type: boolean
+        expiresOn:
+          description: |
+            [Unix Time Stamp](https://www.unixtimestamp.com/) of the date that the streaming option is expiring.
+            In other words, last day to watch.
+          type: integer
+          format: int64
+        availableSince:
+          type: integer
+          format: int64
+          description: |
+            [Unix Time Stamp](https://www.unixtimestamp.com/) of the date that this streaming option was detected.
+      required:
+        - service
+        - audios
+        - subtitles
+        - type
+        - link
+        - availableSince
+        - expiresSoon
+
+    price:
+      title: price
+      description: |
+        Price of the renting or buying the item.
+        
+        A movie and an episode that is available to buy or rent will always have a price.
+        
+        A series or a season that is available to buy or rent may have a price or not.
+        If the price is available, that means the entire series or the season can be bought or rented as a whole
+        for the given price.
+        If the price is null, that means sub-items of the series or the season are available to buy or rent,
+        but it is not possible to buy or rent the entire series or the season as a whole at once.
+        In this case, the price of the sub-items can be found in the episodes or seasons array.
+      additionalProperties: false
+      type: object
+      properties:
+        amount:
+          description: Numerical amount of the price.
+          type: string
+        currency:
+          description: "[ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) alphabetic code of the currency."
+          type: string
+        formatted:
+          description: Formatted price, including both the amount and the currency.
+          type: string
+      required:
+        - amount
+        - currency
+        - formatted
+
+    subtitle:
+      title: subtitle
+      type: object
+      properties:
+        closedCaptions:
+          description: Whether closed captions are available for the subtitle.
+          type: boolean
+        locale:
+          $ref: "#/components/schemas/locale"
+      required:
+        - closedCaptions
+        - locale
+
+    locale:
+      title: locale
+      type: object
+      description: A language and optionally an associated region.
+      properties:
+        language:
+          description: "[ISO 639-2](https://en.wikipedia.org/wiki/ISO_639-2) code of the associated language with the locale."
+          type: string
+        region:
+          description: |
+            [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) code of the country,
+            or [UN M49](https://en.wikipedia.org/wiki/UN_M49) code of the area associated with the locale.
+          type: string
+      required:
+        - language
+
+    genre:
+      title: genre
+      type: object
+      examples:
+        - summary: Action
+          externalValue: https://www.movieofthenight.com/v4/examples/genres/action
+        - summary: Science Fiction
+          externalValue: https://www.movieofthenight.com/v4/examples/genres/scifi
+      description: | 
+        Genres are used to categorize shows.
+        Each genre object contains the id and name of the genre.
+        When fetching genres via [/genres](#get-all-genres) endpoint, you can pass the output_language parameter
+        to get the genre names in one of the supported languages.
+        
+        You can use genre ids to filter shows in the search endpoints.
+      properties:
+        id:
+          $ref: "#/components/schemas/genreId"
+          description: Id of the genre
+        name:
+          description: Name of the genre
+          type: string
+      required:
+        - id
+        - name
+
+    genreId:
+      type: string
+      description: Id of a genre.
+      enums:
+        - action
+        - adventure
+        - animation
+        - comedy
+        - crime
+        - documentary
+        - drama
+        - family
+        - fantasy
+        - history
+        - horror
+        - music
+        - mystery
+        - news
+        - reality
+        - romance
+        - scifi
+        - talk
+        - thriller
+        - war
+        - western
+
+    change:
+      title: change
+      type: object
+      examples:
+        - summary: New Movie
+          externalValue: https://www.movieofthenight.com/v4/examples/changes/movie/new
+        - summary: Updated Episode
+          externalValue: https://www.movieofthenight.com/v4/examples/changes/episode/updated
+        - summary: Expiring Season
+          externalValue: https://www.movieofthenight.com/v4/examples/changes/season/expiring
+        - summary: Upcoming Series
+          externalValue: https://www.movieofthenight.com/v4/examples/changes/series/upcoming
+      description: |
+        A change object represents a future or past change in a streaming catalog.
+        It contains the details such as the type of the change
+        (could be past change such as like new, updated, removed;
+        or a future change such as expiring, upcoming),
+        the affected item type (show, season or episode), timestamp of the change and more.
+        
+        Via change endpoints, you can get the most recent updates in the streaming catalogs.
+        On top of the changes, you can also get the details of the affected shows. Every change object
+        has a showId field.
+        You can find the list of shows affected by the changes in the shows field of the response, and match
+        the show ids with the showId field of the change objects.
+      properties:
+        changeType:
+          $ref: "#/components/schemas/changeType"
+          description: Type of the change.
+        itemType:
+          $ref: "#/components/schemas/itemType"
+          description: Type of the item affected from the change.
+        showId:
+          type: string
+          description: Id of the show affected from the change.
+        showType:
+          $ref: "#/components/schemas/showType"
+          description: Type of the show affected from the change.
+        season:
+          type: integer
+          description: Number of the season affected from the change. Omitted if item_type is not seasonor episode.
+        episode:
+          type: integer
+          description: Number of the episode affected from the change. Omitted if item_type is not episode.
+        service:
+          $ref: "#/components/schemas/serviceInfo"
+          description: Service affected from the change.
+        streamingOptionType:
+          $ref: "#/components/schemas/streamingOptionType"
+        addon:
+          $ref: "#/components/schemas/addon"
+          description: Addon info, if the streamingOptionType is addon. Otherwise omitted.
+        timestamp:
+          format: int64
+          type: integer
+          description: |
+            [Unix Time Stamp](https://www.unixtimestamp.com/) of the change.
+            Past changes (new, updated, removed) will always have a timestamp.
+            Future changes (expiring, upcoming) will have a timestamp if the exact date is known.
+            If not, timestamp will be omitted, e.g. a show is known to be expiring soon, but the exact date is not known.
+        link:
+          type: string
+          description: |
+            Deep link to the affected streaming option's page in the web app of the streaming service.
+            This field is guaranteed to be populated when changeType is new, updated, expiring or removed.
+            When changeType is upcoming, this field might be populated or null depending on if the link of the future streaming option is known.
+      required:
+        - showId
+        - changeType
+        - itemType
+        - showType
+        - service
+        - streamingOptionType
+
+    itemType:
+      type: string
+      description: Type of an item.
+      
+      x-enumDescriptions:
+        show: Show, either a movie or a series
+        season: Season
+        episode: Episode
+      
+      enum:
+        - show
+        - season
+        - episode
+
+    showType:
+      type: string
+      description: Type of a show.
+      
+      x-enumDescriptions:
+        movie: A show that is intended to be watched in a single sitting.
+        series: A show that has seasons and episodes.
+      
+      enum:
+        - movie
+        - series
+
+    changeType:
+      type: string
+      description: Type of the change.
+      
+      x-enumDescriptions:
+        new: Added recently to the catalog.
+        removed: Removed recently from the catalog.
+        updated: |
+          Recently updated.
+          This includes recent additions and removals, plus the streaming options with updated links, subtitles or video qualities etc.
+        expiring: Expiring from the catalog soon.
+        upcoming: Will be added to the catalog soon.
+      
+      enum:
+        - new
+        - removed
+        - updated
+        - expiring
+        - upcoming
+
+    error:
+      title: error
+      type: object
+      additionalProperties: false
+      required:
+        - message
+      properties:
+        message:
+          type: string
+
+    searchResult:
+      type: object
+      additionalProperties: false
+      properties:
+        shows:
+          description: Array of shows.
+          type: array
+          items:
+            $ref: "#/components/schemas/show"
+        hasMore:
+          description: Whether there are more shows available.
+          type: boolean
+        nextCursor:
+          description: Cursor value to pass to get the next set of shows.
+          type: string
+      required:
+        - shows
+        - hasMore
+
+    changesResult:
+      type: object
+      additionalProperties: false
+      properties:
+        changes:
+          description: Array of the changes.
+          type: array
+          items:
+            $ref: "#/components/schemas/change"
+        shows:
+          $ref: "#/components/schemas/showMap"
+          description: Map of the shows affected by the changes.
+        hasMore:
+          description: Whether there are more changes available.
+          type: boolean
+        nextCursor:
+          description: Cursor value to pass to get the next set of changes.
+          type: string
+      required:
+        - changes
+        - shows
+        - hasMore
+
+    showMap:
+      type: object
+      description: Map of the shows by their ids.
+      additionalProperties:
+        $ref: "#/components/schemas/show"
+
+    countryMap:
+      type: object
+      description: Map of supported countries by their [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) codes
+      additionalProperties:
+        $ref: "#/components/schemas/country"
+
+    orderDirection:
+      type: string
+      
+      x-enumDescriptions:
+        asc: Use ascending order.
+        desc: Use descending order.
+      
+      enum:
+        - asc
+        - desc
+
+  responses:
+    countriesResponse:
+      description: Details of the supported countries.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/countryMap"
+          
+          examples:
+            Countries:
+              summary: Countries
+              externalValue: https://www.movieofthenight.com/openapi/example/countries
+          
+
+    countryResponse:
+      description: Details of a country.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/country"
+          
+          examples:
+            United States:
+              summary: United States
+              externalValue: https://www.movieofthenight.com/v4/examples/countries/us
+              x-parameters:
+                country-code: us
+            Canada:
+              summary: Canada
+              externalValue: https://www.movieofthenight.com/v4/examples/countries/ca
+              x-parameters:
+                country-code: ca
+            United Kingdom:
+              summary: United Kingdom
+              externalValue: https://www.movieofthenight.com/v4/examples/countries/gb
+              x-parameters:
+                country-code: gb
+            Germany:
+              summary: Germany
+              externalValue: https://www.movieofthenight.com/v4/examples/countries/de
+              x-parameters:
+                country-code: de
+            India:
+              summary: India
+              externalValue: https://www.movieofthenight.com/v4/examples/countries/in
+              x-parameters:
+                country-code: in
+          
+
+    genresResponse:
+      description: Details of the supported genres.
+      content:
+        application/json:
+          schema:
+            description: Array of the supported genres.
+            type: array
+            items:
+              $ref: "#/components/schemas/genre"
+          
+          examples:
+            Genres in English:
+              summary: Genres in English
+              externalValue: https://www.movieofthenight.com/v4/examples/genres/en
+              x-parameters:
+                output_language: en
+            Genres in French:
+              summary: Genres in French
+              externalValue: https://www.movieofthenight.com/v4/examples/genres/fr
+              x-parameters:
+                output_language: fr
+          
+
+    errorResponse:
+      description: An error occurred.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+          
+          examples:
+            Error:
+              x-statusCode: 400
+              summary: Error
+              value:
+                message: An error occurred.
+          
+
+    notFoundResponse:
+      description: The show is not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+          
+          examples:
+            Not Found:
+              x-statusCode: 404
+              summary: Not Found
+              value:
+                message: Not Found
+          
+
+    showResponse:
+      description: Details of the show.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/show"
+          
+          examples:
+            The Godfather via IMDb Id:
+              summary: The Godfather via IMDb Id
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/god-father
+              x-parameters:
+                id: tt0068646
+            The Dark Knight via TMDB Id:
+              summary: The Dark Knight via TMDB Id
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/the-dark-knight
+              x-parameters:
+                id: movie/155
+            The Queen's Gambit via IMDb Id:
+             summary: The Queen's Gambit via IMDb Id
+             externalValue: https://www.movieofthenight.com/v4/examples/shows/the-queens-gambit
+             x-parameters:
+              id: tt10048342
+            Chernobyl via TMDB Id:
+              summary: Chernobyl via TMDB Id
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/chernobyl
+              x-parameters:
+                  id: tv/87108
+          
+
+    searchByFiltersResponse:
+      description: Response to a search by filters query.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/searchResult"
+          
+          examples:
+            Zombie Movies on Netflix US:
+              summary: Zombie Movies on Netflix US
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/search/filters/netflix-us-zombie-movies
+              x-parameters:
+                country: us
+                catalogs: netflix
+                keyword: zombie
+                show_type: movie
+            Highest Rated Science Fiction Shows on Disney+ CA:
+              summary: Highest Rated Comedy Shows on Disney+ CA
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/search/filters/disney-ca-scifi-shows
+              x-parameters:
+                country: ca
+                catalogs: disney
+                genres: scifi
+                order_by: rating
+            Popular RomCom Series on Max Addon in Hulu US:
+              summary: Popular RomCom Series on Max Addon in Hulu US
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/search/filters/hulu-us-max-addon-popular-romcom-series
+              x-parameters:
+                country: us
+                catalogs: hulu.addon.max
+                genres: romance,comedy
+                order_by: popularity_1year
+            Rentable Movies from 2000s on Apple TV and Prime Video UK:
+              summary: Rentable Movies from 2010s on Apple TV and Prime Video UK
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/search/filters/apple-prime-uk-rentable-2010s-movies
+              x-parameters:
+                country: gb
+                catalogs: apple.rent,prime.rent
+                year_min: 2010
+                year_max: 2019
+                show_type: movie
+                order_by: rating
+          
+
+    searchByTitleResponse:
+      description: Response to a search by title query.
+      content:
+        application/json:
+          schema:
+            description: Array of the shows that match the title.
+            type: array
+            items:
+              $ref: "#/components/schemas/show"
+          
+          examples:
+            Batman Shows:
+              summary: Batman Shows
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/search/title/batman
+              x-parameters:
+                title: Batman
+            Harry Potter Movies:
+              summary: Harry Potter Movies
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/search/title/harry-potter
+              x-parameters:
+                title: Harry Potter
+                show_type: movie
+            Doctor Who Series:
+              summary: Doctor Who Series
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/search/title/doctor-who
+              x-parameters:
+                title: Doctor Who
+                show_type: series
+          
+
+    changesResponse:
+      description: Response to a change set query.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/changesResult"
+          
+          examples:
+            New Netflix US Movies:
+              summary: New Netflix US Movies
+              externalValue: https://www.movieofthenight.com/v4/examples/changes/netflix/us/new/movie
+              x-parameters:
+                country: us
+                catalogs: netflix
+                change_type: new
+                item_type: show
+                show_type: movie
+            Updated Max US Episodes:
+              summary: Updated Max US Episodes
+              externalValue: https://www.movieofthenight.com/v4/examples/changes/hbo/us/updated/episode
+              x-parameters:
+                country: us
+                catalogs: hbo
+                change_type: updated
+                item_type: episode
+            Expiring Hulu US Seasons:
+              summary: Expiring Hulu US Seasons
+              externalValue: https://www.movieofthenight.com/v4/examples/changes/hulu/us/expiring/season
+              x-parameters:
+                country: us
+                catalogs: hulu.subscription
+                change_type: expiring
+                item_type: season
+            Upcoming Netflix CA Series:
+              summary: Upcoming Netflix CA Series
+              externalValue: https://www.movieofthenight.com/v4/examples/changes/netflix/ca/upcoming/series
+              x-parameters:
+                country: ca
+                catalogs: netflix
+                change_type: upcoming
+                item_type: show
+                show_type: series
+          
+
+  parameters:
+    catalogsParam:
+      name: catalogs
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      examples:
+        Netflix:
+          value: netflix
+          description: Search in Netflix
+        Amazon Prime Video:
+          value: prime.subscription
+          description: Search in Amazon Prime Video among the shows available via a Prime subscription.
+        Buy/Rent:
+          value: prime.rent,prime.buy,apple.rent,apple.buy
+          description: Search among buyable/rentable shows in Amazon Prime Video and Apple TV.
+        HBO Max and HBO Max Addons:
+          value: hbo,hulu.addon.hbo,prime.addon.hbomaxus
+          description: Search in HBO Max itself and HBO Max channels in Amazon Prime Video and Hulu
+        Hulu + HBO Max Addon:
+          value: hulu.subscription,hulu.addon.hbo
+          description: Search in Hulu and HBO Max addon in Hulu.
+        Apple TV Channels:
+          value: apple.addon
+          description: Search in all the Apple TV channels
+        Free Peacock Shows:
+          value: peacock.free
+          description: Search in free shows on Peacock.
+
+      description: |
+        A comma separated list of up to 32 catalogs to search in.
+        See /countries endpoint to get the supported services in each country and their ids.
+
+        When multiple catalogs are passed as a comma separated list, any show that is in at least one of the catalogs will be included in the result.
+        
+        If no catalogs are passed, the endpoint will search in all the available catalogs in the country.
+
+        Syntax of the catalogs supplied in the list can be as the followings:
+
+        - <sevice_id>: Searches in the entire catalog of that service,
+        including (if applicable) rentable, buyable shows or shows available through addons e.g. netflix, prime, apple
+
+        - <sevice_id>.<streaming_option_type>: Only returns the shows that are available in that service with the given streaming option type.
+        Valid streaming option types are subscription, free, rent, buy and addon
+        e.g. peacock.free only returns the shows on Peacock that are free to watch,
+        prime.subscription only returns the shows on Prime Video that are available to watch with a Prime subscription.
+        hulu.addon only returns the shows on Hulu that are available via an addon, prime.rent only returns the shows on Prime Video that are rentable.
+
+        - <sevice_id>.addon.<addon_id>: Only returns the shows that are available in that service with the given addon.
+        Check /countries endpoint to fetch the available addons for a service in each country. Some sample values are: hulu.addon.hbo, prime.addon.hbomaxus.
+
+    changeTypeParam:
+      name: change_type
+      in: query
+      required: true
+      description: Type of changes to query.
+      schema:
+        $ref: "#/components/schemas/changeType"
+
+    showTypeParam:
+      name: show_type
+      in: query
+      required: false
+      description: |
+        Type of shows to search in.
+        If not supplied, both movies and series will be included in the search results.
+      schema:
+        $ref: "#/components/schemas/showType"
+
+    itemTypeParam:
+      name: item_type
+      in: query
+      required: true
+      description: |
+        Type of items to search in.
+        If item_type is show, you can use show_type parameter to only search for movies or series.
+      schema:
+        $ref: "#/components/schemas/itemType"
+
+    genresParam:
+      name: genres
+      in: query
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          $ref: "#/components/schemas/genreId"
+      description: |
+        A comma seperated list of genre ids to only search within the shows in those genre.
+        See /genres endpoint to see the available genres and their ids.
+        Use genres_relation parameter to specify between returning shows that have at least one of the given genres
+        or returning shows that have all of the given genres.
+      examples:
+        Action:
+          value: action
+          description: Action
+        Romantic Comedy:
+          value: romantic,comedy
+          description: Romantic Comedy
+        War Drama:
+          value: war,drama
+          description: War Drama
+        Science Fiction:
+          value: scifi
+          description: Science Fiction
+
+
+    genresRelationParam:
+      name: genres_relation
+      in: query
+      required: false
+      description: |
+        Only used when there are multiple genres supplied in genres parameter.
+
+        When or, the endpoint returns any show that has at least one of the given genres.
+        When and, it only returns the shows that have all of the given genres.
+      schema:
+        type: string
+        default: and
+        
+        x-enumDescriptions:
+          and: Only bring results that include all of the given genres.
+          or: Bring any result that includes at least one of the given genres.
+        
+        enum:
+          - and
+          - or
+
+    fromParam:
+      name: from
+      in: query
+      required: false
+      description: |
+        [Unix Time Stamp](https://www.unixtimestamp.com/) to only query the changes happened/happening after this date (inclusive).
+        For past changes such as new, removed or updated, the timestamp must be between today and 31 days ago.
+        For future changes such as expiring or upcoming, the timestamp must be between today and 31 days from now in the future.
+        
+        If not supplied, the default value for past changes is 31 days ago, and for future changes is today.
+      schema:
+        type: integer
+        format: int64
+      examples:
+        "1672531200":
+          description: Unix timestamp of January 1, 2023. Note that this is just an example value and you cannot directly use this timestamp as it is not within 31 days.
+          value: 1672531200
+        "1690070400":
+          description: Unix timestamp of July 23, 2023. Note that this is just an example value and you cannot directly use this timestamp as it is not within 31 days.
+          value: 1690070400
+
+    toParam:
+      name: to
+      in: query
+      required: false
+      description: |
+        [Unix Time Stamp](https://www.unixtimestamp.com/) to only query the changes happened/happening before this date (inclusive).
+        For past changes such as new, removed or updated, the timestamp must be between today and 31 days ago.
+        For future changes such as expiring or upcoming, the timestamp must be between today and 31 days from now in the future.
+        
+        If not supplied, the default value for past changes is today, and for future changes is 31 days from now.
+      schema:
+        type: integer
+        format: int64
+      examples:
+        "1672531200":
+          description: Unix timestamp of January 1, 2023. Note that this is just an example value and you cannot directly use this timestamp as it is not within 31 days.
+          value: 1672531200
+        "1690070400":
+          description: Unix timestamp of July 23, 2023. Note that this is just an example value and you cannot directly use this timestamp as it is not within 31 days.
+          value: 1690070400
+
+    includeUnknownDatesParam:
+        name: include_unknown_dates
+        in: query
+        required: false
+        description: |
+          Whether to include the changes with unknown dates.
+          past changes such as new, removed or updated will always have a timestamp thus this parameter does not affect them.
+          future changes such as expiring or upcoming may not have a timestamp if the exact date is not known
+          (e.g. some services do not explicitly state the exact date of some of the upcoming/expiring shows).
+          If set as true, the changes with unknown dates will be included in the response.
+          If set as false, the changes with unknown dates will be excluded from the response.
+          
+          When ordering, the changes with unknown dates will be treated as if their timestamp is 0.
+          Thus, they will appear first in the ascending order and last in the descending order.
+        schema:
+          type: boolean
+          default: false
+
+    ratingMinParam:
+      name: rating_min
+      in: query
+      required: false
+      description: Minimum rating of the shows.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 100
+      examples:
+        "75":
+          description: Only show results that has a rating of at least 75 out of 100.
+          value: 75.
+        "60":
+          description: Only show results that has a rating of least 60 out of 100.
+          value: 60.
+
+    ratingMaxParam:
+      name: rating_max
+      in: query
+      required: false
+      description: Maximum rating of the shows.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 100
+      examples:
+        "80":
+          description: Only show results that has a rating of at most 80 out of 100.
+          value: 80.
+        "50":
+          description: Only show results that has a rating of at most 50 out of 100.
+          value: 50.
+
+    yearMinParam:
+      name: year_min
+      in: query
+      required: false
+      description: Minimum release/air year of the shows.
+      schema:
+        type: integer
+      examples:
+        "1980":
+          description: Only show results that released/aired after 1980.
+          value: 1980.
+        "2020":
+          description: Only show results that released/aired after 2020.
+          value: 2020.
+
+    yearMaxParam:
+      name: year_max
+      in: query
+      required: false
+      description: Maximum release/air year of the shows.
+      schema:
+        type: integer
+      examples:
+        "1990":
+          description: Only show results that released/aired before 1990.
+          value: 1980.
+        "2000":
+          description: Only show results that released/aired before 2000.
+          value: 2020.
+
+    searchFiltersOrderByParam:
+      name: order_by
+      in: query
+      required: false
+      description: |
+        Determines the ordering of the shows.
+        Make sure to set descending_order parameter as true when ordering by popularity or rating
+        so that shows with the highest popularity or rating will be returned first.
+      schema:
+        type: string
+        default: original_title
+        
+        x-enumDescriptions:
+          original_title: Order alphabetically by original titles.
+          release_date: Order by release/air date.
+          rating: Order by rating.
+          popularity_alltime: Order by all-time popularity in the country.
+          popularity_1year: Order by popularity in the last 365 days in the country.
+          popularity_1month: Order by popularity in the last 31 days in the country.
+          popularity_1week: Order by popularity in the last 7 days in the country.
+        
+        enum:
+          - original_title
+          - release_date
+          - rating
+          - popularity_alltime
+          - popularity_1year
+          - popularity_1month
+          - popularity_1week
+
+    searchFiltersOrderDirectionParam:
+      name: order_direction
+      in: query
+      required: false
+      description: |
+        Determines whether to order the results in ascending or descending order.
+        
+        Default value when ordering alphabetically or based on dates/times is asc.
+        
+        Default value when ordering by rating or popularity is desc.
+      schema:
+        $ref: "#/components/schemas/orderDirection"
+
+    changesOrderDirectionParam:
+      name: order_direction
+      in: query
+      required: false
+      description: |
+        Determines whether to order the results in ascending or descending order.
+      schema:
+        $ref: "#/components/schemas/orderDirection"
+
+    originalLanguageParam:
+      name: show_original_language
+      in: query
+      required: false
+      description: |
+        [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639-1) language code to only search within the shows whose original language matches with the provided language.
+      schema:
+        type: string
+      examples:
+        English:
+          description: ISO 639-1 code of English.
+          value: en
+        Spanish:
+          description: ISO 639-1 code of Spanish.
+          value: es
+
+    keywordParam:
+      name: keyword
+      in: query
+      required: false
+      description: A keyword to only search within the shows have that keyword in their overview or title.
+      schema:
+        type: string
+      examples:
+        Zombie:
+          value: zombie
+          description: Search for shows with zombies.
+        Alien:
+          value: alien
+          description: Search for shows with aliens.
+
+    titleParam:
+      name: title
+      in: query
+      required: true
+      description: Title phrase to search for.
+      schema:
+        type: string
+      examples:
+        Batman:
+          value: Batman
+          description: Search for Batman shows.
+        Harry Potter:
+          value: Harry Potter
+          description: Search for Harry Potter shows.
+
+    cursorParam:
+      name: cursor
+      in: query
+      required: false
+      description: |
+        Cursor is used for pagination.
+        After each request, the response includes a hasMore boolean field to tell if there are more results that did not fit into the returned list.
+        If it is set as true, to get the rest of the result set, send a new request
+        (with the same parameters for other fields),
+        and set the cursor parameter as the nextCursor value of the response of the previous request.
+        Do not forget to escape the cursor value before putting it into a query as it might contain characters such as ?and &.
+
+        The first request naturally does not require a cursor parameter.
+      schema:
+        type: string
+
+    countryParam:
+      name: country
+      in: query
+      required: true
+      description: |
+        [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code of the target country.
+        See /countries endpoint to get the list of supported countries.
+      schema:
+        type: string
+      examples:
+        Canada:
+          description: "ISO 3166-1 alpha-2 code of Canada."
+          value: ca
+        United States:
+          description: "ISO 3166-1 alpha-2 code of United States."
+          value: us
+        Brazil:
+          description: "ISO 3166-1 alpha-2 code of Brazil."
+          value: br
+        United Kingdom:
+          description: "ISO 3166-1 alpha-2 code of United Kingdom."
+          value: gb
+        Germany:
+          description: "ISO 3166-1 alpha-2 code of Germany."
+          value: de
+        South Africa:
+          description: "ISO 3166-1 alpha-2 code of South Africa."
+          value: za
+        India:
+          description: "ISO 3166-1 alpha-2 code of India."
+          value: in
+        Japan:
+          description: "ISO 3166-1 alpha-2 code of Japan."
+          value: jp
+
+    optionalCountryParam:
+      name: country
+      in: query
+      required: false
+      description: |
+        [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code of the optional target country.
+        If this parameter is not supplied, global streaming availability across all the countries will be returned.
+        If it is supplied, only the streaming availability info from the given country will be returned.
+        If you are only interested in the streaming availability in a single country,
+        then it is recommended to use this parameter to reduce the size of the response and increase the performance of the endpoint.
+        See /countries endpoint to get the list of supported countries.
+      schema:
+        type: string
+      examples:
+        Canada:
+          description: "ISO 3166-1 alpha-2 code of Canada."
+          value: ca
+        United States:
+          description: "ISO 3166-1 alpha-2 code of United States."
+          value: us
+        Brazil:
+          description: "ISO 3166-1 alpha-2 code of Brazil."
+          value: br
+        United Kingdom:
+          description: "ISO 3166-1 alpha-2 code of United Kingdom."
+          value: gb
+        Germany:
+          description: "ISO 3166-1 alpha-2 code of Germany."
+          value: de
+        South Africa:
+          description: "ISO 3166-1 alpha-2 code of South Africa."
+          value: za
+        India:
+          description: "ISO 3166-1 alpha-2 code of India."
+          value: in
+        Japan:
+          description: "ISO 3166-1 alpha-2 code of Japan."
+          value: jp
+
+    idParam:
+      name: id
+      in: path
+      required: true
+      description: |
+        id of the show. You can also pass an IMDb Id or a TMDB Id as an id.
+        The endpoint will automatically detect the type of the id and fetch the show accordingly.
+        
+        When passing an IMDb Id,
+        it should be in the format of tt<numerical_id>. (e.g. tt0120338 for Titanic)
+        
+        When passing a TMDB Id,
+        it should be in the format of movie/<numerical_id> for movies and tv/<numerical_id> for series.
+        (e.g. tv/1396 for Breaking Bad and movie/597 for Titanic)
+        
+        If you are handcrafting the URL, make sure to encode the id parameter.
+        (e.g. final path should look like /shows/movie%2F597 for Titanic with TMDb id).
+        Here, %2F is the encoded version of /.
+        To read more about URL encoding, you can check [this link](https://en.wikipedia.org/wiki/Percent-encoding).
+      schema:
+        type: string
+      examples:
+        Titanic (IMDb):
+          description: "IMDb ID of the movie Titanic."
+          value: tt0120338
+        Breaking Bad (IMDb):
+          description: "IMDb ID of the series Breaking Bad."
+          value: tt0903747
+        Titanic (TMDb):
+          description: "TMDb ID of the movie Titanic."
+          value: movie/597
+        Breaking Bad (TMDb):
+          description: "TMDb ID of the series Breaking Bad."
+          value: tv/1396
+
+    countryCodeParam:
+      name: country-code
+      in: path
+      required: true
+      description: |
+        [ISO 3166-1 alpha-2 code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) of the country.
+      schema:
+        type: string
+      examples:
+        United States:
+          description: United States
+          value: us
+        Canada:
+          description: Canada
+          value: ca
+        United Kingdom:
+          description: United Kingdom
+          value: gb
+        Germany:
+          description: Germany
+          value: de
+
+    outputLanguageParam:
+      name: output_language
+      in: query
+      description: |
+        [ISO 639-1 code](https://en.wikipedia.org/wiki/ISO_639-1) of the output language.
+        Determines in which language the output  will be in.
+      schema:
+        type: string
+        default: en
+        
+        x-enumDescriptions:
+          en: English
+          es: Spanish
+          tr: Turkish
+          fr: French
+        
+        enum:
+          - en
+          - es
+          - tr
+          - fr
+
+    getGranularityParam:
+      name: series_granularity
+      in: query
+      description: |
+        series_granularity determines the level of detail for series. It does not affect movies.
+        
+        If series_granularity is show, then the output will not include season and episode info.
+        
+        If series_granularity is season, then the output will include season info but not episode info.
+        
+        If series_granularity is episode, then the output will include season and episode info.
+        
+        If you do not need season and episode info, then it is recommended to set series_granularity as show
+        to reduce the size of the response and increase the performance of the endpoint.
+        
+        If you need deep links for individual seasons and episodes, then you should set series_granularity as episode.
+        In this case response will include full streaming info for seasons and episodes,
+        similar to the streaming info for movies and series; including deep links into seasons and episodes,
+        individual subtitle/audio and video quality info etc.
+
+      schema:
+        type: string
+        
+        x-enumDescriptions:
+          show: Do not include season or episode info.
+          season: Include season info but not episode info.
+          episode: Include season and episode info.
+        
+        enum:
+          - show
+          - season
+          - episode
+        default: episode
+
+    searchGranularityParam:
+      name: series_granularity
+      in: query
+      description: |
+        series_granularity determines the level of detail for series. It does not affect movies.
+
+        If series_granularity is show, then the output will not include season and episode info.
+
+        If series_granularity is season, then the output will include season info but not episode info.
+
+        If series_granularity is episode, then the output will include season and episode info.
+
+        If you do not need season and episode info, then it is recommended to set series_granularity as show
+        to reduce the size of the response and increase the performance of the endpoint.
+
+        If you need deep links for individual seasons and episodes, then you should set series_granularity as episode.
+        In this case response will include full streaming info for seasons and episodes,
+        similar to the streaming info for movies and series; including deep links into seasons and episodes,
+        individual subtitle/audio and video quality info etc.
+
+      schema:
+        type: string
+        
+        x-enumDescriptions:
+          show: Do not include season or episode info.
+          season: Include season info but not episode info.
+          episode: Include season and episode info.
+        
+        enum:
+          - show
+          - season
+          - episode
+        default: show
+
+
+security:
+  - X-Rapid-API-Key: []
+
+
+paths:
+  /countries:
+    get:
+      operationId: getCountries
+      tags:
+        - countries
+      summary: Get all Countries
+      description: |
+        Get all the supported countries and the list of the supported services and their details for each country.
+        
+        Details of services include names, logos, supported streaming types (subscription, rent, buy, free etc.) and list of available addons/channels.
+      parameters:
+        - $ref: "#/components/parameters/outputLanguageParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/countriesResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+      externalDocs:
+        url: <external_doc_4>countries#get-all-countries</external_doc_4>
+        description: Official Documentation
+
+  /countries/{country-code}:
+    get:
+      operationId: getCountry
+      tags:
+        - countries
+      summary: Get a Country
+      description: |
+        Get a country and the list of the supported services and their details.
+
+        Details of services include names, logos, supported streaming types (subscription, rent, buy, free etc.) and list of available addons/channels.
+      parameters:
+        - $ref: "#/components/parameters/countryCodeParam"
+        - $ref: "#/components/parameters/outputLanguageParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/countryResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+      externalDocs:
+        url: <external_doc_4>countries#get-a-country</external_doc_4>
+        description: Official Documentation
+
+  /genres:
+    get:
+      operationId: getGenres
+      tags:
+        - genres
+      summary: Get all Genres
+      description: Get the list of supported genres.
+      parameters:
+        - $ref: "#/components/parameters/outputLanguageParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/genresResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+      externalDocs:
+        url: <external_doc_4>genres#get-all-genres</external_doc_4>
+        description: Official Documentation
+
+  /shows/{id}:
+    get:
+      tags:
+        - shows
+      operationId: getShow
+      summary: Get a Show
+      description: Get the details of a show via id, imdbId or tmdbId, including the global streaming availability info.
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+        - $ref: "#/components/parameters/optionalCountryParam"
+        - $ref: "#/components/parameters/getGranularityParam"
+        - $ref: "#/components/parameters/outputLanguageParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/showResponse"
+        "404":
+          $ref: "#/components/responses/notFoundResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+      externalDocs:
+        url: <external_doc_4>shows#get-a-show</external_doc_4>
+        description: Official Documentation
+
+  /shows/search/filters:
+    get:
+      tags:
+        - shows
+      operationId: searchShowsByFilters
+      summary: Search Shows by filters
+      description: |
+        Search through the catalog of the given streaming services in the given country.
+        Provides filters such as show language, genres, keyword and release year.
+        Output includes all the information about the shows,
+        such as title, IMDb ID, TMDb ID, release year,
+        deep links to streaming services,
+        available subtitles, audios, available video quality
+        and many more!
+        Apart from the info about the given country-service combinations,
+        output also includes information about streaming availability in the other services for the given country.
+        
+        When show_type is movie or series_granularity is show, items per page is 20.
+        When show_type is series and series_granularity is episode items per page is 10.
+        Otherwise items per page is 15.
+
+      parameters:
+        - $ref: "#/components/parameters/countryParam"
+        - $ref: "#/components/parameters/catalogsParam"
+        - $ref: "#/components/parameters/outputLanguageParam"
+        - $ref: "#/components/parameters/showTypeParam"
+        - $ref: "#/components/parameters/genresParam"
+        - $ref: "#/components/parameters/genresRelationParam"
+        - $ref: "#/components/parameters/originalLanguageParam"
+        - $ref: "#/components/parameters/yearMinParam"
+        - $ref: "#/components/parameters/yearMaxParam"
+        - $ref: "#/components/parameters/ratingMinParam"
+        - $ref: "#/components/parameters/ratingMaxParam"
+        - $ref: "#/components/parameters/keywordParam"
+        - $ref: "#/components/parameters/searchGranularityParam"
+        - $ref: "#/components/parameters/searchFiltersOrderByParam"
+        - $ref: "#/components/parameters/searchFiltersOrderDirectionParam"
+        - $ref: "#/components/parameters/cursorParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/searchByFiltersResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+      externalDocs:
+        url: <external_doc_4>shows#search-shows-by-filters</external_doc_4>
+        description: Official Documentation
+
+  /shows/search/title:
+    get:
+      tags:
+        - shows
+      operationId: searchShowsByTitle
+      summary: Search Shows by title
+      description: |
+        Search for movies and series by a title.
+        Maximum amount of items returned are 20
+        unless there are more than 20 shows with the exact given title input.
+        In that case all the items have 100% match with the title will be returned.
+
+        No pagination is supported.
+      parameters:
+        - $ref: "#/components/parameters/titleParam"
+        - $ref: "#/components/parameters/showTypeParam"
+        - $ref: "#/components/parameters/countryParam"
+        - $ref: "#/components/parameters/searchGranularityParam"
+        - $ref: "#/components/parameters/outputLanguageParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/searchByTitleResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+      externalDocs:
+        url: <external_doc_4>shows#search-shows-by-title</external_doc_4>
+        description: Official Documentation
+
+  /changes:
+    get:
+      tags:
+        - changes
+      operationId: getChanges
+      summary: Get Changes
+      description: |
+        Query the new, removed, updated, expiring or upcoming movies/series/seasons/episodes in a given list of streaming services.
+        Results are ordered by the date of the changes.
+        Changes listed per page is 25.
+        
+        Changes are listed under changes field, and shows affected by these changes are listed under shows field.
+      parameters:
+        - $ref: "#/components/parameters/countryParam"
+        - $ref: "#/components/parameters/catalogsParam"
+        - $ref: "#/components/parameters/changeTypeParam"
+        - $ref: "#/components/parameters/itemTypeParam"
+        - $ref: "#/components/parameters/showTypeParam"
+        - $ref: "#/components/parameters/fromParam"
+        - $ref: "#/components/parameters/toParam"
+        - $ref: "#/components/parameters/includeUnknownDatesParam"
+        - $ref: "#/components/parameters/cursorParam"
+        - $ref: "#/components/parameters/changesOrderDirectionParam"
+        - $ref: "#/components/parameters/outputLanguageParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/changesResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+      externalDocs:
+        url: <external_doc_4>shows#search-shows-by-title</external_doc_4>
+        description: Official Documentation
