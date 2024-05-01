@@ -1833,7 +1833,7 @@ paths:
         
         When show_type is movie or series_granularity is show, items per page is 20.
         When show_type is series and series_granularity is episode items per page is 10.
-        Otherwise items per page is 15.
+        Otherwise, items per page is 15.
 
       parameters:
         - $ref: "#/components/parameters/countryParam"
