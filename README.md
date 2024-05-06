@@ -16,6 +16,8 @@ To send more requests, you can upgrade to paid plans whenever you like.
 
 - [Subscription Page on RapidAPI](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/pricing)
 
+- [API Documentation](https://docs.movieofthenight.com/)
+
 - [Contact Form](https://www.movieofthenight.com/contact)
 
 - [Home Page of the API on RapidAPI](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/)
