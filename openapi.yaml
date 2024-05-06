@@ -13,22 +13,22 @@ tags:
   - name: shows
     x-schema: show
     externalDocs:
-      url: <external_doc_4>shows</external_doc_4>
+      url: https://docs.movieofthenight.com/resource/shows
       description: Official Documentation
   - name: countries
     x-schema: country
     externalDocs:
-      url: <external_doc_4>countries</external_doc_4>
+      url: https://docs.movieofthenight.com/resource/countries
       description: Official Documentation
   - name: genres
     x-schema: genre
     externalDocs:
-      url: <external_doc_4>genres</external_doc_4>
+      url: https://docs.movieofthenight.com/resource/genres
       description: Official Documentation
   - name: changes
     x-schema: change
     externalDocs:
-      url: <external_doc_4>changes</external_doc_4>
+      url: https://docs.movieofthenight.com/resource/changes
       description: Official Documentation
 
 components:
@@ -158,13 +158,10 @@ components:
             streamingOptionTypes:
               $ref: "#/components/schemas/streamingOptionTypes"
             addons:
-              $ref: "#/components/schemas/addonMap"
-
-    addonMap:
-      type: object
-      description: Map of the supported addons by their ids.
-      additionalProperties:
-        $ref: "#/components/schemas/addon"
+              type: array
+              description: Array of the supported addons in the service.
+              items:
+                $ref: "#/components/schemas/addon"
 
     streamingOptionsMap:
       type: object
@@ -892,7 +889,7 @@ components:
           examples:
             Countries:
               summary: Countries
-              externalValue: https://www.movieofthenight.com/openapi/example/countries
+              externalValue: https://www.movieofthenight.com/v4/examples/countries
           
 
     countryResponse:
@@ -1748,7 +1745,7 @@ paths:
         default:
           $ref: "#/components/responses/errorResponse"
       externalDocs:
-        url: <external_doc_4>countries#get-all-countries</external_doc_4>
+        url: https://docs.movieofthenight.com/resource/countries#get-all-countries
         description: Official Documentation
 
   /countries/{country-code}:
@@ -1770,7 +1767,7 @@ paths:
         default:
           $ref: "#/components/responses/errorResponse"
       externalDocs:
-        url: <external_doc_4>countries#get-a-country</external_doc_4>
+        url: https://docs.movieofthenight.com/resource/countries#get-a-country
         description: Official Documentation
 
   /genres:
@@ -1788,7 +1785,7 @@ paths:
         default:
           $ref: "#/components/responses/errorResponse"
       externalDocs:
-        url: <external_doc_4>genres#get-all-genres</external_doc_4>
+        url: https://docs.movieofthenight.com/resource/genres#get-all-genres
         description: Official Documentation
 
   /shows/{id}:
@@ -1811,7 +1808,7 @@ paths:
         default:
           $ref: "#/components/responses/errorResponse"
       externalDocs:
-        url: <external_doc_4>shows#get-a-show</external_doc_4>
+        url: https://docs.movieofthenight.com/resource/shows#get-a-show
         description: Official Documentation
 
   /shows/search/filters:
@@ -1830,6 +1827,7 @@ paths:
         and many more!
         Apart from the info about the given country-service combinations,
         output also includes information about streaming availability in the other services for the given country.
+        Streaming availability info from the other countries are not included in the response.
         
         When show_type is movie or series_granularity is show, items per page is 20.
         When show_type is series and series_granularity is episode items per page is 10.
@@ -1858,7 +1856,7 @@ paths:
         default:
           $ref: "#/components/responses/errorResponse"
       externalDocs:
-        url: <external_doc_4>shows#search-shows-by-filters</external_doc_4>
+        url: https://docs.movieofthenight.com/resource/shows#search-shows-by-filters
         description: Official Documentation
 
   /shows/search/title:
@@ -1872,6 +1870,12 @@ paths:
         Maximum amount of items returned are 20
         unless there are more than 20 shows with the exact given title input.
         In that case all the items have 100% match with the title will be returned.
+        
+        Streaming availability info for the target country is included in the response,
+        but not for the other countries.
+        
+        Results might include shows that are not streamable in the target country.
+        Only criteria for the search are the title and the show type.
 
         No pagination is supported.
       parameters:
@@ -1886,7 +1890,7 @@ paths:
         default:
           $ref: "#/components/responses/errorResponse"
       externalDocs:
-        url: <external_doc_4>shows#search-shows-by-title</external_doc_4>
+        url: https://docs.movieofthenight.com/resource/shows#search-shows-by-title
         description: Official Documentation
 
   /changes:
@@ -1919,5 +1923,5 @@ paths:
         default:
           $ref: "#/components/responses/errorResponse"
       externalDocs:
-        url: <external_doc_4>shows#search-shows-by-title</external_doc_4>
+        url: https://docs.movieofthenight.com/resource/shows#search-shows-by-title
         description: Official Documentation
