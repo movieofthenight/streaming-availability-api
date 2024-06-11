@@ -1,6 +1,6 @@
 ## Streaming Availability API
 
-Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 59 countries!
+Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 60 countries!
 
 ### API Key
 
@@ -104,10 +104,10 @@ RapidAPI and start using the Streaming Availability API through RapidAPI right a
 
 | Service Id | Service Name | Supported Countries |
 | ---------- | ------------ | ------------------- |
-| `netflix` | Netflix | 58 Countries |
+| `netflix` | Netflix | 59 Countries |
 | `prime` | Prime Video | 56 Countries |
-| `disney` | Disney+ | 36 Countries |
-| `hbo` | HBO Max | 24 Countries |
+| `disney` | Disney+ | 51 Countries |
+| `hbo` | Max | 24 Countries |
 | `hulu` | Hulu | United States |
 | `peacock` | Peacock | United States |
 | `paramount` | Paramount+ | 18 Countries |
@@ -124,6 +124,12 @@ RapidAPI and start using the Streaming Availability API through RapidAPI right a
 | `zee5` | Zee5 | 58 Countries |
 | `curiosity` | Curiosity Stream | 57 Countries |
 | `wow` | Wow | Germany |
+| `discovery` | Discovery+ | United States, Canada, Ireland, Italy, United Kingdom, Germany, Austria |
+| `sonyliv` | SonyLiv | India |
+| `itvx` | ITVX | United Kingdom |
+| `plutotv` | Pluto TV | 25 Countries |
+| `tubi` | Tubi | Australia, Canada, New Zealand, Ecuador, Mexico, Panama, United States |
+| `blutv` | BluTV | Turkey, Germany, Azerbaijan |
 
 
 ## Countries Supported
@@ -183,6 +189,7 @@ RapidAPI and start using the Streaming Availability API through RapidAPI right a
 | `se` | Sweden |
 | `sg` | Singapore |
 | `si` | Slovenia |
+| `sk` | Slovakia |
 | `th` | Thailand |
 | `tr` | Turkey |
 | `ua` | Ukraine |
