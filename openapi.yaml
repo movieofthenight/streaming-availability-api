@@ -2,8 +2,9 @@ openapi: 3.1.0
 
 info:
   title: Streaming Availability API
-  description: Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 59 countries!
-  version: 4.0.0
+  description: Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 60 countries!
+  version: 4.1.0
+  termsOfService: https://github.com/movieofthenight/streaming-availability-api/blob/main/TERMS.md
 
 servers:
   - url: https://streaming-availability.p.rapidapi.com
@@ -32,18 +33,20 @@ tags:
       description: Official Documentation
 
 components:
+  
   securitySchemes:
     X-Rapid-API-Key:
       description: "Rapid API Key can be retrieved from [Rapid API](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/pricing)."
       type: apiKey
       name: X-RapidAPI-Key
       in: header
+  
 
   schemas:
     addon:
       title: addon
       type: object
-      additionalProperties: false
+      
       description: Details of an addon.
       required:
         - id
@@ -71,7 +74,7 @@ components:
     streamingOptionTypes:
       title: streamingOptionTypes
       type: object
-      additionalProperties: false
+      
       description: Availability of the streaming option types in the service.
       required:
         - addon
@@ -99,7 +102,7 @@ components:
     serviceImageSet:
       title: serviceImageSet
       type: object
-      additionalProperties: false
+      
       description: Image set of a service or an addon.
       required:
         - lightThemeImage
@@ -119,7 +122,7 @@ components:
     serviceInfo:
       title: serviceInfo
       type: object
-      additionalProperties: false
+      
       description: Details of the streaming service localized according to the parent country.
       required:
         - id
@@ -150,7 +153,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/serviceInfo"
         - type: object
-          additionalProperties: false
+          
           required:
             - streamingOptionTypes
             - addons
@@ -186,7 +189,7 @@ components:
           externalValue: https://www.movieofthenight.com/v4/examples/countries/de
         - summary: India
           externalValue: https://www.movieofthenight.com/v4/examples/countries/in
-      additionalProperties: false
+      
       description: |
         Countries are the primary way to get the supported streaming services and addons
         (such as list of available Apple TV and Prime Video channels) in a region.
@@ -245,7 +248,7 @@ components:
         and offers advanced ordering options such as ordering by popularity, rating, release year etc.
 
       type: object
-      additionalProperties: false
+      
       examples:
         - summary: The Godfather
           externalValue: https://www.movieofthenight.com/v4/examples/shows/god-father
@@ -270,7 +273,7 @@ components:
           description: "[IMDb](https://www.imdb.com/) id of the show."
           type: string
         tmdbId:
-          description: "[TMDD](https://www.themoviedb.org/) id of the show."
+          description: "[TMDB](https://www.themoviedb.org/) id of the show."
           type: string
         title:
           description: Title of the show.
@@ -321,6 +324,9 @@ components:
         episodeCount:
           type: integer
           description: Number of episodes that are either aired or announced for a series.
+        runtime:
+          type: integer
+          description: Runtime of the movie in minutes.
         imageSet:
           $ref: "#/components/schemas/showImageSet"
           description: Image set of the show.
@@ -349,7 +355,7 @@ components:
     showImageSet:
       title: showImageSet
       type: object
-      additionalProperties: false
+      
       description: Image set of a show.
       required:
         - verticalPoster
@@ -371,7 +377,7 @@ components:
     horizontalImage:
       title: horizontalImage
       type: object
-      additionalProperties: false
+      
       description: Horizontal image of a show.
       required:
         - w360
@@ -399,7 +405,7 @@ components:
     verticalImage:
       title: verticalImage
       type: object
-      additionalProperties: false
+      
       description: Horizontal image of a show.
       required:
         - w240
@@ -468,6 +474,9 @@ components:
         title:
           description: Title of the episode.
           type: string
+        overview:
+          description: A brief overview of the plot of the episode.
+          type: string
         airYear:
           description: The year that the episode aired.
           type: integer
@@ -501,7 +510,7 @@ components:
       title: streamingOption
       type: object
       description: A streaming option.
-      additionalProperties: false
+      
       properties:
         service:
           $ref: "#/components/schemas/serviceInfo"
@@ -586,7 +595,7 @@ components:
         If the price is null, that means sub-items of the series or the season are available to buy or rent,
         but it is not possible to buy or rent the entire series or the season as a whole at once.
         In this case, the price of the sub-items can be found in the episodes or seasons array.
-      additionalProperties: false
+      
       type: object
       properties:
         amount:
@@ -806,7 +815,7 @@ components:
     error:
       title: error
       type: object
-      additionalProperties: false
+      
       required:
         - message
       properties:
@@ -815,7 +824,7 @@ components:
 
     searchResult:
       type: object
-      additionalProperties: false
+      
       properties:
         shows:
           description: Array of shows.
@@ -834,7 +843,7 @@ components:
 
     changesResult:
       type: object
-      additionalProperties: false
+      
       properties:
         changes:
           description: Array of the changes.
@@ -1084,6 +1093,32 @@ components:
                 show_type: series
           
 
+    topShowsResponse:
+      description: Response to a top shows query.
+      content:
+        application/json:
+          schema:
+            description: Array of the top shows.
+            type: array
+            items:
+              $ref: "#/components/schemas/show"
+          
+          examples:
+            Top Series on Netflix US:
+              summary: Top Series on Netflix US
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/netflix/top/series
+              x-parameters:
+                country: us
+                service: netflix
+                show_type: series
+            Top Shows on Apple TV+ UK:
+              summary: Top Shows on Apple TV+ UK
+              externalValue: https://www.movieofthenight.com/v4/examples/shows/apple/top
+              x-parameters:
+                country: gb
+                service: apple
+          
+
     changesResponse:
       description: Response to a change set query.
       content:
@@ -1129,15 +1164,38 @@ components:
           
 
   parameters:
+    serviceParam:
+      name: service
+      in: query
+      required: true
+      schema:
+        type: string
+      description: |
+        Id of the target service.
+      examples:
+        Netflix:
+          value: netflix
+          description: Netflix
+        Amazon Prime Video:
+          value: prime
+          description: Amazon Prime Video
+        Apple TV:
+          value: apple
+          description: Apple TV
+
+
     catalogsParam:
       name: catalogs
       in: query
+      
+      
       style: form
       explode: false
       schema:
         type: array
         items:
           type: string
+      
       examples:
         Netflix:
           value: netflix
@@ -1215,12 +1273,15 @@ components:
       name: genres
       in: query
       required: false
+      
+      
       style: form
       explode: false
       schema:
         type: array
         items:
           $ref: "#/components/schemas/genreId"
+      
       description: |
         A comma seperated list of genre ids to only search within the shows in those genre.
         See /genres endpoint to see the available genres and their ids.
@@ -1231,7 +1292,7 @@ components:
           value: action
           description: Action
         Romantic Comedy:
-          value: romantic,comedy
+          value: romance,comedy
           description: Romantic Comedy
         War Drama:
           value: war,drama
@@ -1588,11 +1649,6 @@ components:
         When passing a TMDB Id,
         it should be in the format of movie/<numerical_id> for movies and tv/<numerical_id> for series.
         (e.g. tv/1396 for Breaking Bad and movie/597 for Titanic)
-        
-        If you are handcrafting the URL, make sure to encode the id parameter.
-        (e.g. final path should look like /shows/movie%2F597 for Titanic with TMDb id).
-        Here, %2F is the encoded version of /.
-        To read more about URL encoding, you can check [this link](https://en.wikipedia.org/wiki/Percent-encoding).
       schema:
         type: string
       examples:
@@ -1893,6 +1949,40 @@ paths:
         url: https://docs.movieofthenight.com/resource/shows#search-shows-by-title
         description: Official Documentation
 
+  /shows/top:
+    get:
+      tags:
+        - shows
+      operationId: getTopShows
+      summary: Get Top Shows
+      description: |
+        Get the official top shows in a service.
+        Top shows are determined by the streaming service itself.
+
+        Supported streaming services are:
+        - Netflix: netflix
+        - Amazon Prime Video: prime
+        - Apple TV: apple
+        - Max: hbo
+
+        For unsupported services, this endpoint will return an empty list.
+
+        Series granularity is always show for this endpoint,
+        meaning that the output will not include season and episode info.
+      parameters:
+        - $ref: "#/components/parameters/countryParam"
+        - $ref: "#/components/parameters/serviceParam"
+        - $ref: "#/components/parameters/outputLanguageParam"
+        - $ref: "#/components/parameters/showTypeParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/topShowsResponse"
+        default:
+          $ref: "#/components/responses/errorResponse"
+      externalDocs:
+        url: https://docs.movieofthenight.com/resource/shows#get-top-shows
+        description: Official Documentation
+
   /changes:
     get:
       tags:
@@ -1905,6 +1995,9 @@ paths:
         Changes listed per page is 25.
         
         Changes are listed under changes field, and shows affected by these changes are listed under shows field.
+        
+        Note that upcoming changes are only supported for Apple TV, Disney+, Max, Netflix and Prime Video.
+        For other services, upcoming changes will return an empty list.
       parameters:
         - $ref: "#/components/parameters/countryParam"
         - $ref: "#/components/parameters/catalogsParam"
