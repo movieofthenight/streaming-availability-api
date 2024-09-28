@@ -101,7 +101,8 @@ RapidAPI and start using the Streaming Availability API through RapidAPI right a
 
 ## Client Libraries
 
-1. [TypeScript/JavaScript](https://github.com/movieofthenight/ts-streaming-availability)
+1. [Go](https://github.com/movieofthenight/go-streaming-availability)
+2. [TypeScript/JavaScript](https://github.com/movieofthenight/ts-streaming-availability)
 
 
 ## Services Supported
