@@ -1453,8 +1453,9 @@ components:
       required: false
       description: |
         Determines the ordering of the shows.
-        Make sure to set descending_order parameter as true when ordering by popularity or rating
-        so that shows with the highest popularity or rating will be returned first.
+        
+        You can switch between ascending and descending order by using the order_direction parameter.
+
       schema:
         type: string
         default: original_title
