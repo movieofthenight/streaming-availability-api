@@ -5,22 +5,18 @@ Streaming Availability API allows getting streaming availability information of 
 ### API Key
 
 To get an instant free subscription to start using the API, you can visit
-[the RapidAPI page of the API](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/pricing).
+[our Authorization guide](https://docs.movieofthenight.com/guide/authorization).
 
-With a free subscription, you can send 100 requests per day.
-To send more requests, you can upgrade to paid plans whenever you like.
+You can get started with a free plan without giving any payment information,
+and upgrade to paid plans whenever you like.
 
 ### Useful Links
 
 - [Official Webpage of the API](https://www.movieofthenight.com/about/api)
 
-- [Subscription Page on RapidAPI](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/pricing)
-
 - [API Documentation](https://docs.movieofthenight.com/)
 
 - [Contact Form](https://www.movieofthenight.com/contact)
-
-- [Home Page of the API on RapidAPI](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/)
 
 - [Main GitHub Repository of the API](https://github.com/movieofthenight/streaming-availability-api)
 
@@ -56,12 +52,12 @@ movies, series, seasons and episodes,
 
 While the client libraries have MIT licenses,
 the Streaming Availability API itself has further
-[Terms & Conditions](https://github.com/movieofthenight/streaming-availability-api/blob/main/TERMS.md).
+[Terms & Conditions](https://developers.movieofthenight.com/terms-and-conditions).
 Make sure to read it before using the API.
 
 Notably, the API requires an attribution to itself, if the data acquired through
 is made public. You can read further about the attribution requirement on the
-[Terms & Conditions](https://github.com/movieofthenight/streaming-availability-api/blob/main/TERMS.md)
+[Terms & Conditions](https://developers.movieofthenight.com/terms-and-conditions)
 page.
 
 ## Contact Us
@@ -75,11 +71,8 @@ If you have any questions or need further assistance, please don't hesitate to r
   - The data is updated daily.
 
 - **I run into an issue. How can I get help?**
-  - If the issue is related to the API itself, please create a post
-[here](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/discussions),
-and we will help with the issue.
-  - If the issue is specific to a client library, then you can create a new issue
-on the respective repository of the library.
+  - Send us a message via [our contact form](https://www.movieofthenight.com/contact),
+and we will get back to you as soon as possible.
 
 - **API returned me some wrong data. What can I do?**
   - Send us a message with details of your findings.
@@ -94,112 +87,11 @@ Once we receive the message we will take a look into the problems and fix the da
   - Send us a message via [our contact form](https://www.movieofthenight.com/contact),
   and we will get back to you.
 
-- **What is RapidAPI?**
-  - RapidAPI is the world's largest API marketplace. We use RapidAPI to handle the
-API subscriptions for us. You can instantly subscribe to Streaming Availability on
-RapidAPI and start using the Streaming Availability API through RapidAPI right away.
-
 ## Client Libraries
 
-1. [Go](https://github.com/movieofthenight/go-streaming-availability)
-2. [TypeScript/JavaScript](https://github.com/movieofthenight/ts-streaming-availability)
+[Click here to see the full list of official client libraries](https://docs.movieofthenight.com/guide/client-libraries)
 
+## Services & Countries Supported
 
-## Services Supported
-
-| Service Id | Service Name | Supported Countries |
-| ---------- | ------------ | ------------------- |
-| `netflix` | Netflix | 59 Countries |
-| `prime` | Prime Video | 56 Countries |
-| `disney` | Disney+ | 46 Countries |
-| `hbo` | Max | 28 Countries |
-| `hulu` | Hulu | United States |
-| `peacock` | Peacock | United States |
-| `paramount` | Paramount+ | 18 Countries |
-| `starz` | Starz | United States |
-| `apple` | Apple TV | 52 Countries |
-| `mubi` | Mubi | 53 Countries |
-| `stan` | Stan | Australia |
-| `now` | Now | United Kingdom, Ireland, Italy |
-| `crave` | Crave | Canada |
-| `all4` | Channel 4 | United Kingdom, Ireland |
-| `iplayer` | BBC iPlayer | United Kingdom |
-| `britbox` | BritBox | United States, Canada, Australia, South Africa |
-| `hotstar` | Hotstar | India, Canada, United Kingdom, Singapore |
-| `zee5` | Zee5 | 58 Countries |
-| `curiosity` | Curiosity Stream | 57 Countries |
-| `wow` | Wow | Germany |
-| `discovery` | Discovery+ | United States, Canada, Ireland, Italy, United Kingdom, Germany, Austria |
-| `sonyliv` | SonyLiv | India |
-| `itvx` | ITVX | United Kingdom |
-| `plutotv` | Pluto TV | 25 Countries |
-| `tubi` | Tubi | Australia, Canada, New Zealand, Ecuador, Mexico, Panama, United States |
-| `blutv` | BluTV | Turkey, Germany, Azerbaijan |
-
-
-## Countries Supported
-
-| Country Code | Country Name |
-| ------------ | ------------ |
-| `ae` | United Emirates |
-| `ar` | Argentina |
-| `at` | Austria |
-| `au` | Australia |
-| `az` | Azerbaijan |
-| `be` | Belgium |
-| `bg` | Bulgaria |
-| `br` | Brazil |
-| `ca` | Canada |
-| `ch` | Switzerland |
-| `cl` | Chile |
-| `co` | Colombia |
-| `cy` | Cyprus |
-| `cz` | Czech Republic |
-| `de` | Germany |
-| `dk` | Denmark |
-| `ec` | Ecuador |
-| `ee` | Estonia |
-| `es` | Spain |
-| `fi` | Finland |
-| `fr` | France |
-| `gb` | United Kingdom |
-| `gr` | Greece |
-| `hk` | Hong Kong |
-| `hr` | Croatia |
-| `hu` | Hungary |
-| `id` | Indonesia |
-| `ie` | Ireland |
-| `il` | Israel |
-| `in` | India |
-| `is` | Iceland |
-| `it` | Italy |
-| `jp` | Japan |
-| `kr` | South Korea |
-| `lt` | Lithuania |
-| `md` | Moldova |
-| `mk` | North Macedonia |
-| `mx` | Mexico |
-| `my` | Malaysia |
-| `nl` | Netherlands |
-| `no` | Norway |
-| `nz` | New Zealand |
-| `pa` | Panama |
-| `pe` | Peru |
-| `ph` | Philippines |
-| `pl` | Poland |
-| `pt` | Portugal |
-| `ro` | Romania |
-| `rs` | Serbia |
-| `ru` | Russia |
-| `se` | Sweden |
-| `sg` | Singapore |
-| `si` | Slovenia |
-| `sk` | Slovakia |
-| `th` | Thailand |
-| `tr` | Turkey |
-| `ua` | Ukraine |
-| `us` | United States |
-| `vn` | Vietnam |
-| `za` | South Africa |
-
+We support all the major streaming services across the globe, [click here to see the full list!](https://docs.movieofthenight.com/guide/countries-and-services)
 
