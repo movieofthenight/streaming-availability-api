@@ -4,11 +4,19 @@ info:
   title: Streaming Availability API
   description: Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 60 countries!
   version: 4.1.0
-  termsOfService: https://github.com/movieofthenight/streaming-availability-api/blob/main/TERMS.md
+  termsOfService: https://developers.movieofthenight.com/terms-and-conditions
 
 servers:
+  - url: https://api.movieofthenight.com/v4
+    description: >
+      Use this server if you got your API key from developers.movieofthenight.com,
+      pass the API key as X-API-Key in HTTP headers
+    
   - url: https://streaming-availability.p.rapidapi.com
-    description: Official API Server
+    description: >
+      Use this server if you got your API key from rapidapi.com,
+      pass the API key as X-Rapid-API-Key in HTTP headers
+    
 
 tags:
   - name: shows
@@ -35,7 +43,12 @@ tags:
 components:
   
   securitySchemes:
-    X-Rapid-API-Key:
+    X-API-Key:
+      description: "API Key can be retrieved from [our Developers Platform](https://developers.movieofthenight.com/)."
+      type: apiKey
+      name: X-API-Key
+      in: header
+    X-RapidAPI-Key:
       description: "Rapid API Key can be retrieved from [Rapid API](https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability/pricing)."
       type: apiKey
       name: X-RapidAPI-Key
@@ -1780,7 +1793,8 @@ components:
 
 
 security:
-  - X-Rapid-API-Key: []
+  - X-API-Key: []
+  - X-RapidAPI-Key: []
 
 
 paths:
@@ -1963,6 +1977,7 @@ paths:
         Supported streaming services are:
         - Netflix: netflix
         - Amazon Prime Video: prime
+        - Disney+: disney
         - Apple TV: apple
         - Max: hbo
 
