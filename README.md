@@ -1,11 +1,11 @@
 ## Streaming Availability API
 
-Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 60 countries!
+Streaming Availability API allows getting streaming availability information of movies and series; and querying the list of available shows on streaming services such as Netflix, Disney+, Apple TV, Max and Hulu across 66 countries!
 
 ### API Key
 
 To get an instant free subscription to start using the API, you can visit
-[our Authorization guide](https://docs.movieofthenight.com/guide/authorization).
+[our Authentication guide](https://docs.movieofthenight.com/guide/authentication).
 
 You can get started with a free plan without giving any payment information,
 and upgrade to paid plans whenever you like.
